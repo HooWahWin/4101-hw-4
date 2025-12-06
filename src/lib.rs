@@ -1,4 +1,3 @@
-use regex::Regex;
 use std::collections::HashMap;
 
 /// Returns the first `n` Fibonacci numbers.
@@ -156,8 +155,21 @@ impl PhoneBook {
 
     /// Helper function to validate phone number format
     fn is_valid_number(number: &str) -> bool {
-        let re = Regex::new(r"^\d{3}-\d{3}-\d{4}$").unwrap();
-        return re.is_match(number);
+        let parts: Vec<&str> = number.split('-').collect();
+        if parts.len() != 3 {
+            return false;
+        }
+
+        // Check each part has correct length and contains only digits
+        if parts[0].len() != 3 || parts[1].len() != 3 || parts[2].len() != 4 {
+            return false;
+        }
+        for part in parts {
+            if !part.chars().all(|c| c.is_ascii_digit()) {
+                return false;
+            }
+        }
+        true
     }
 
     /// Looks up `name` and returns the number ONLY if the entry is listed.
